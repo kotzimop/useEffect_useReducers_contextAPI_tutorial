@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
@@ -7,45 +7,43 @@ import MainHeader from "./components/MainHeader/MainHeader";
 import AuthContext from "./components/store/auth-context";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const ctx = useContext(AuthContext);
+  console.log(ctx.isLoggedIn);
 
-  // Check local storage for info
-  const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    if (storedUserLoggedInInformation === "1") {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  // // Check local storage for info
+  // const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
 
-  const loginHandler = (email, password) => {
-    // We should of course check email and password
-    // But it's just a dummy/ demo anyways
+  // useEffect(() => {
+  //   if (storedUserLoggedInInformation === "1") {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, []);
 
-    // Save credentials into localstorage
-    localStorage.setItem("isLoggedIn", "1");
+  // const loginHandler = (email, password) => {
+  //   // We should of course check email and password
+  //   // But it's just a dummy/ demo anyways
 
-    setIsLoggedIn(true);
-  };
+  //   // Save credentials into localstorage
+  //   localStorage.setItem("isLoggedIn", "1");
 
-  const logoutHandler = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };
+  //   setIsLoggedIn(true);
+  // };
+
+  // const logoutHandler = () => {
+  //   localStorage.removeItem("isLoggedIn");
+  //   setIsLoggedIn(false);
+  // };
 
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: isLoggedIn,
-        onLogout: logoutHandler,
-      }}
-    >
-      <MainHeader onLogout={logoutHandler} />
+    <React.Fragment>
+      <MainHeader />
       <main>
-        {!isLoggedIn && <Login onLogin={loginHandler} />}
-        {isLoggedIn && <Home onLogout={logoutHandler} />}
+        {!ctx.isLoggedIn && <Login />}
+        {ctx.isLoggedIn && <Home />}
       </main>
-    </AuthContext.Provider>
+    </React.Fragment>
   );
 }
 
